@@ -1,31 +1,60 @@
 import { useNavigate } from "react-router-dom";
+import Layout from "../../components/Layout";
 
-function AdminDashboard() {
-  const navigate = useNavigate(); // ✅ THIS WAS MISSING
+export default function AdminDashboard() {
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
 
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
+    <Layout title="Admin • Dashboard">
+      <div className="row" style={{ justifyContent: "flex-end" }}>
+        <button className="btn danger" onClick={logout}>
+          Logout
+        </button>
+      </div>
 
-      <br />
+      <div className="h1">Admin Dashboard</div>
+      <div className="sub">
+        Manage restaurants, food items and orders 👨‍🍳
+      </div>
 
-      <button onClick={() => navigate("/admin/add-restaurant")}>
-        Add Restaurant
-      </button>
+      <div className="statGrid">
+        <div className="statCard">
+          <div className="statTitle">Restaurants</div>
+          <div className="statValue">Manage</div>
+          <div className="statHint">Add / Edit / Delete</div>
+        </div>
 
-      <br /><br />
+        <div className="statCard">
+          <div className="statTitle">Food Items</div>
+          <div className="statValue">Manage</div>
+          <div className="statHint">Per restaurant menu</div>
+        </div>
 
-      <button onClick={() => navigate("/admin/restaurants")}>
-        View Restaurants
-      </button>
+        <div className="statCard">
+          <div className="statTitle">Orders</div>
+          <div className="statValue">Track</div>
+          <div className="statHint">Update status</div>
+        </div>
+      </div>
 
-      <br /><br />
+      <div className="adminActions">
+        <button className="aBtn" onClick={() => navigate("/admin/restaurants/add")}>
+          ➕ Add Restaurant
+        </button>
 
-      <button onClick={() => navigate("/admin/orders")}>
-        View Orders
-      </button>
-    </div>
+        <button className="aBtn" onClick={() => navigate("/admin/restaurants")}>
+          🏪 View Restaurants
+        </button>
+
+        <button className="aBtn" onClick={() => navigate("/admin/orders")}>
+          📦 View Orders
+        </button>
+      </div>
+    </Layout>
   );
 }
-
-export default AdminDashboard;

@@ -1,56 +1,66 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
+import Layout from "../../components/Layout";
+import RestaurantCard from "../../components/RestaurantCard"; // ✅ FIX
 
-function UserRestaurantList() {
+export default function UserRestaurantList() {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        const res = await api.get("/user/restaurants");
-        setRestaurants(res.data || []);
-      } catch (err) {
-        console.error(err);
-        alert("Failed to load restaurants");
-        setRestaurants([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const load = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get("/user/restaurants");
+      setRestaurants(Array.isArray(res.data) ? res.data : []);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to load restaurants");
+      setRestaurants([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchRestaurants();
+  useEffect(() => {
+    load();
   }, []);
 
   return (
-    <div>
-      <h3>Restaurants</h3>
+    <Layout title="User • Restaurants">
+      <div className="h1">Restaurants</div>
+      <div className="sub">Pick a restaurant and explore the menu 🍛</div>
 
-      {loading && <p>Loading...</p>}
+      {/* <div className="row" style={{ marginBottom: 14 }}>
+        <button className="btn" onClick={() => navigate("/user/cart")}>
+          🛒 Cart
+        </button>
+        <button className="btn" onClick={() => navigate("/user/orders")}>
+          📦 My Orders
+        </button>
+        <button className="btn" onClick={load}>
+          🔄 Refresh
+        </button>
+      </div> */}
 
-      {!loading && restaurants.length === 0 && <p>No restaurants found</p>}
+      {loading && <div className="card cardPad">Loading...</div>}
 
-      {restaurants.map((r) => (
-        <div
-          key={r.id}
-          style={{
-            border: "1px solid #ccc",
-            padding: "10px",
-            marginBottom: "10px",
-          }}
-        >
-          <h4>{r.name}</h4>
-          <p>{r.address}</p>
+      {!loading && restaurants.length === 0 && (
+        <div className="card cardPad">No restaurants found</div>
+      )}
 
-          <button onClick={() => navigate(`/user/restaurants/${r.id}`)}>
-            View Food Items
-          </button>
+      {!loading && restaurants.length > 0 && (
+        <div className="grid">
+          {restaurants.map((r) => (
+            <RestaurantCard
+              key={r.id}
+              restaurant={r}
+              onClick={() => navigate(`/user/restaurants/${r.id}`)}
+            />
+          ))}
         </div>
-      ))}
-    </div>
+      )}
+    </Layout>
   );
 }
-
-export default UserRestaurantList;

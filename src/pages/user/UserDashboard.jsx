@@ -4,14 +4,44 @@ import UserRestaurantList from "./UserRestaurantList";
 function UserDashboard() {
   const navigate = useNavigate();
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    navigate("/login");
+  };
+
   return (
-    <div>
-      <h2>User Dashboard</h2>
+    <div className="appBg">
+      {/* ===== TOP BAR ===== */}
+      <div className="topBar">
+        <div className="topTitle">User Dashboard</div>
 
-      <button onClick={() => navigate("/user/cart")}>Cart</button>
-      <button onClick={() => navigate("/user/orders")}>My Orders</button>
+        <button
+          className="topBtn"
+          onClick={() => navigate("/user/cart")}
+        >
+          🛒 Cart
+        </button>
 
-      <UserRestaurantList />
+        <button
+          className="topBtn primary"
+          onClick={() => navigate("/user/orders")}
+        >
+          📦 My Orders
+        </button>
+
+        <button
+          className="topBtn danger"
+          onClick={logout}
+        >
+          🚪 Logout
+        </button>
+      </div>
+
+      {/* ===== CONTENT ===== */}
+      <div className="container">
+        <UserRestaurantList />
+      </div>
     </div>
   );
 }

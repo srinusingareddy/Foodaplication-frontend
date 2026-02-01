@@ -1,0 +1,112 @@
+.appBg {
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(11,18,32,0.75), rgba(11,18,32,0.95)),
+    url("../assets/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  padding: 24px 0 60px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.cardPad { padding: 18px; }
+
+.h1 {
+  font-size: 34px;
+  margin: 6px 0 18px;
+  letter-spacing: 0.3px;
+}
+
+.h2 {
+  font-size: 22px;
+  margin: 0 0 12px;
+}
+
+.sub {
+  color: var(--muted);
+  margin-top: -10px;
+  margin-bottom: 18px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; }
+}
+
+.btn {
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.08s ease, opacity 0.2s ease;
+  font-weight: 600;
+}
+.btn:hover { opacity: 0.95; }
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btnPrimary {
+  background: linear-gradient(90deg, var(--primary), var(--primary2));
+  border: none;
+}
+
+.btnDanger {
+  background: rgba(255, 77, 109, 0.15);
+  border: 1px solid rgba(255, 77, 109, 0.35);
+  color: #ffd7df;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.input {
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--text);
+  outline: none;
+}
+.input::placeholder { color: rgba(234,240,255,0.55); }
+
+.form {
+  display: grid;
+  gap: 12px;
+}

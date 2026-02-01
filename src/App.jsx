@@ -1,33 +1,34 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
 
+// ================= ADMIN PAGES =================
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import AddRestaurant from "./pages/admin/AddRestaurant";
 import RestaurantList from "./pages/admin/RestaurantList";
+import AddRestaurant from "./pages/admin/AddRestaurant";
 import EditRestaurant from "./pages/admin/EditRestaurant";
+import FoodItemList from "./pages/admin/FoodItemList";
+import AddFoodItem from "./pages/admin/AddFoodItem";
+import EditFoodItem from "./pages/admin/EditFoodItem";
 import AdminOrders from "./pages/admin/AdminOrders";
 
-
-import AddFoodItem from "./pages/admin/AddFoodItem";
-import FoodItemList from "./pages/admin/FoodItemList";
-import EditFoodItem from "./pages/admin/EditFoodItem";
-
+// ================= USER PAGES =================
 import UserDashboard from "./pages/user/UserDashboard";
 import UserFoodItemList from "./pages/user/UserFoodItemList";
 import Cart from "./pages/user/Cart";
 import MyOrders from "./pages/user/MyOrders";
 
-import ProtectedRoute from "./components/ProtectedRoute";
-
-function App() {
+export default function App() {
   return (
     <Routes>
       {/* DEFAULT */}
-      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
 
-      {/* LOGIN */}
+      {/* AUTH */}
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       {/* ================= ADMIN ROUTES ================= */}
       <Route
@@ -35,15 +36,6 @@ function App() {
         element={
           <ProtectedRoute role="ADMIN">
             <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/add-restaurant"
-        element={
-          <ProtectedRoute role="ADMIN">
-            <AddRestaurant />
           </ProtectedRoute>
         }
       />
@@ -58,6 +50,15 @@ function App() {
       />
 
       <Route
+        path="/admin/add-restaurant"
+        element={
+          <ProtectedRoute role="ADMIN">
+            <AddRestaurant />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/admin/edit-restaurant/:id"
         element={
           <ProtectedRoute role="ADMIN">
@@ -66,6 +67,7 @@ function App() {
         }
       />
 
+      {/* Food Items by Restaurant */}
       <Route
         path="/admin/restaurants/:restaurantId/food-items"
         element={
@@ -83,21 +85,21 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route
-  path="/admin/orders"
-  element={
-    <ProtectedRoute role="ADMIN">
-      <AdminOrders />
-    </ProtectedRoute>
-  }
-/>
-
 
       <Route
         path="/admin/edit-food/:id"
         element={
           <ProtectedRoute role="ADMIN">
             <EditFoodItem />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/orders"
+        element={
+          <ProtectedRoute role="ADMIN">
+            <AdminOrders />
           </ProtectedRoute>
         }
       />
@@ -131,6 +133,16 @@ function App() {
       />
 
       <Route
+  path="/admin/restaurants/add"
+  element={
+    <ProtectedRoute role="ADMIN">
+      <AddRestaurant />
+    </ProtectedRoute>
+  }
+/>
+
+
+      <Route
         path="/user/orders"
         element={
           <ProtectedRoute role="USER">
@@ -144,5 +156,3 @@ function App() {
     </Routes>
   );
 }
-
-export default App;

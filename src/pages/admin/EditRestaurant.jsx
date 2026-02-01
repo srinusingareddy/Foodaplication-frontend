@@ -1,54 +1,96 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../api/api";
+import Layout from "../../components/Layout";
 
-function EditRestaurant() {
+export default function EditRestaurant() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-  // GET restaurant by id
   useEffect(() => {
-    api.get(`/admin/restaurants/${id}`).then((res) => {
-      setName(res.data.name);
-      setAddress(res.data.address); // ✅ FIX
-    });
+    const load = async () => {
+      setLoading(true);
+      try {
+        // ⚠️ only if backend has GET /admin/restaurants/{id}
+        const res = await api.get(`/admin/restaurants/${id}`);
+        setName(res.data?.name || "");
+        setAddress(res.data?.address || "");
+      } catch (err) {
+        console.error(err);
+        alert("Failed to load restaurant");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
   }, [id]);
 
-  // UPDATE restaurant
-  const handleUpdate = async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
+    if (!name.trim() || !address.trim()) return alert("All fields required");
 
-    await api.put(`/admin/restaurants/${id}`, {
-      name,
-      address, // ✅ FIX
-    });
-
-    alert("Restaurant updated successfully");
-    navigate("/admin/restaurants");
+    try {
+      setSaving(true);
+      await api.put(`/admin/restaurants/${id}`, {
+        name: name.trim(),
+        address: address.trim(),
+      });
+      alert("Restaurant Updated ✅");
+      navigate("/admin/restaurants");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update restaurant");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
-    <form onSubmit={handleUpdate}>
-      <h2>Edit Restaurant</h2>
+    <Layout title="Admin • Edit Restaurant">
+      <div className="formWrap">
+        <div className="h1">Edit Restaurant</div>
+        <div className="sub">Update restaurant details ✏</div>
 
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Restaurant Name"
-      />
+        {loading ? (
+          <div className="card cardPad" style={{ marginTop: 12 }}>Loading...</div>
+        ) : (
+          <div className="formCard" style={{ marginTop: 12 }}>
+            <form onSubmit={submit}>
+              <div className="fRow">
+                <div className="fLabel">Restaurant Name</div>
+                <input
+                  className="fInput"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
 
-      <input
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-        placeholder="Address"
-      />
+              <div className="fRow">
+                <div className="fLabel">Address</div>
+                <input
+                  className="fInput"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
 
-      <button type="submit">Update</button>
-    </form>
+              <div className="fActions">
+                <button className="btn" type="button" onClick={() => navigate(-1)}>
+                  Cancel
+                </button>
+                <button className="btn" disabled={saving}>
+                  {saving ? "Saving..." : "Update ✅"}
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+      </div>
+    </Layout>
   );
 }
-
-export default EditRestaurant;

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../api/api";
+import Layout from "../../components/Layout";
+import FoodCard from "../../components/FoodCard";
 
-function UserFoodItemList() {
+export default function UserFoodItemList() {
   const { restaurantId } = useParams();
   const navigate = useNavigate();
 
@@ -11,26 +13,25 @@ function UserFoodItemList() {
   const [addingId, setAddingId] = useState(null);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const loadFoodItems = async () => {
-      try {
-        setLoading(true);
-        setError("");
-        const res = await api.get(`/user/restaurants/${restaurantId}/fooditems`);
-        setFoodItems(res.data || []);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load food items");
-        setFoodItems([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadFoodItems = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await api.get(`/user/restaurants/${restaurantId}/fooditems`);
+      setFoodItems(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load food items");
+      setFoodItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     loadFoodItems();
   }, [restaurantId]);
 
-  // ✅ Add to cart (DB)
   const addToCart = async (foodItemId) => {
     try {
       setAddingId(foodItemId);
@@ -45,37 +46,39 @@ function UserFoodItemList() {
   };
 
   return (
-    <div>
-      <h2>Menu</h2>
+    <Layout title="User • Menu">
+      <div className="row" style={{ justifyContent: "space-between", marginBottom: 14 }}>
+        <div>
+          <div className="h1">Menu</div>
+          <div className="sub">Choose your favorite items 🍽</div>
+        </div>
 
-      <button onClick={() => navigate("/user")}>Back</button>
-      <button onClick={() => navigate("/user/cart")}>Go to Cart</button>
+        <div className="row">
+          <button className="btn" onClick={() => navigate("/user")}>⬅ Back</button>
+          <button className="btn" onClick={() => navigate("/user/cart")}>🛒 Cart</button>
+          <button className="btn" onClick={loadFoodItems}>🔄 Refresh</button>
+        </div>
+      </div>
 
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {loading && <div className="card cardPad">Loading...</div>}
+      {error && <div className="card cardPad">{error}</div>}
 
       {!loading && !error && foodItems.length === 0 && (
-        <p>No food items found</p>
+        <div className="card cardPad">No food items found</div>
       )}
 
-      {foodItems.map((f) => (
-        <div
-          key={f.id}
-          style={{ border: "1px solid #ccc", margin: 10, padding: 10 }}
-        >
-          <h4>{f.name}</h4>
-          <p>₹{f.price}</p>
-
-          <button
-            onClick={() => addToCart(f.id)}
-            disabled={addingId === f.id}
-          >
-            {addingId === f.id ? "Adding..." : "Add to Cart"}
-          </button>
+      {!loading && !error && foodItems.length > 0 && (
+        <div className="grid">
+          {foodItems.map((f) => (
+            <FoodCard
+              key={f.id}
+              food={f}
+              adding={addingId === f.id}
+              onAdd={() => addToCart(f.id)}
+            />
+          ))}
         </div>
-      ))}
-    </div>
+      )}
+    </Layout>
   );
 }
-
-export default UserFoodItemList;
