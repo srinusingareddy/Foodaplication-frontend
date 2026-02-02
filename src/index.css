@@ -467,6 +467,70 @@ body {
   box-shadow: 0 12px 30px rgba(0,0,0,0.15);
   transition: transform 0.12s ease, opacity 0.2s ease;
 }
+.h1 {
+  font-size: 48px;          /* BIG */
+  font-weight: 900;        /* BOLD */
+  color: #ffffff;          /* PURE WHITE */
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+
+  /* makes text readable on dark background */
+  text-shadow: 
+    0 2px 8px rgba(0,0,0,0.45),
+    0 0 1px rgba(255,255,255,0.2);
+}
+.sub {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 26px;
+}
+.statTitle {
+  font-size: 15px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.statValue {
+  font-size: 26px;
+  font-weight: 900;
+  color: #ffffff;
+  margin-top: 10px;
+}
+
+.statHint {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+}
+.aBtn {
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+}
+.logo {
+  font-size: 22px;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.pageTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+}
+@media (max-width: 700px) {
+  .h1 {
+    font-size: 36px;
+  }
+
+  .sub {
+    font-size: 16px;
+  }
+}
+
 
 .aBtn:hover {
   opacity: 0.95;
@@ -1256,3 +1320,4 @@ img { max-width: 100%; display: block; }
   word-wrap: break-word;
   overflow-wrap: anywhere;
 }
+

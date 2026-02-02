@@ -27,14 +27,37 @@
 // }
 
 
-export default function Layout({ children }) {
+// export default function Layout({ children }) {
+//   return (
+//     <div className="appBg">
+//       {/* NAVBAR REMOVED COMPLETELY */}
+
+//       <div className="container">
+//         {children}
+//       </div>
+//     </div>
+//   );
+// }
+
+export default function Layout({ title, children, onLogout }) {
   return (
     <div className="appBg">
-      {/* NAVBAR REMOVED COMPLETELY */}
+      <div className="nav">
+        <div className="logo">🍽 FoodApp</div>
 
-      <div className="container">
-        {children}
+        <div className="navRight">
+          <span className="pageTitle">{title}</span>
+
+          {onLogout && (
+            <button className="btn danger" onClick={onLogout}>
+              Logout
+            </button>
+          )}
+        </div>
       </div>
+
+      <div className="container">{children}</div>
     </div>
   );
 }
+
