@@ -14,7 +14,6 @@
 // export default api;
 
 import axios from "axios";
-g
 const api = axios.create({
  baseURL: `${API_URL.replace(/\/+$/, "")}/api`,
   headers: { "Content-Type": "application/json" },
