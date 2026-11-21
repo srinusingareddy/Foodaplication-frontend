@@ -28,12 +28,40 @@
 
 // export default api;
 
+// import axios from "axios";
+
+// const API_URL = import.meta.env.VITE_API_URL;
+
+// if (!API_URL) {
+//   throw new Error("VITE_API_URL is not configured");
+// }
+
+// const api = axios.create({
+//   baseURL: `${API_URL.replace(/\/+$/, "")}/api`,
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+// });
+
+// api.interceptors.request.use((config) => {
+//   const token = localStorage.getItem("token");
+
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+
+//   return config;
+// });
+
+// export default api;
+
+
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 if (!API_URL) {
-  throw new Error("VITE_API_URL is not configured");
+  throw new Error("VITE_API_URL is not configured. Check your .env file");
 }
 
 const api = axios.create({
@@ -43,6 +71,7 @@ const api = axios.create({
   },
 });
 
+// Automatically attach JWT token
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 
