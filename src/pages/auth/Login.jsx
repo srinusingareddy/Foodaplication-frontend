@@ -26,11 +26,14 @@ function Login() {
     try {
       setLoading(true);
 
-      const res = await api.post("/auth/login", {
-        email: cleanEmail,
-        password,
-      });
-
+      // const res = await api.post("/auth/login", {
+      //   email: cleanEmail,
+      //   password,
+      // });
+const res = await api.post("/api/auth/login", {
+    email: cleanEmail,
+    password,
+});
       // ✅ store token + role
       localStorage.setItem("token", res.data.token);
 
